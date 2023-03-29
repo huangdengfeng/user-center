@@ -1,0 +1,25 @@
+dubbo:
+  application:
+    name: ${spring.application.name}
+    # wait ms
+    shut-wait: 30000
+    qos-enable: true
+    # 可以省略，代表是有限的协议，部分场景代码判断会优先
+    protocol: tri
+  protocol:
+    port: 9000
+    name: tri
+    #host: 192.168.1.28
+    host: 10.43.17.37
+  # 注册中心
+  registry:
+    address: nacos://${nacos.address}
+    # 实例级别注册，默认是实例和接口
+    #register-mode: instance
+  provider:
+    parameters:
+      # 服务提供者元数据，消费者根据这个路由
+      meta.set: set1
+      meta.idc: idc1
+      meta.city: city1
+      meta.tenant: tenant1

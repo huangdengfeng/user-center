@@ -1,0 +1,34 @@
+dubbo:
+  application:
+    name: ${spring.application.name}
+    # wait ms
+    shut-wait: 30000
+  registry:
+    address: nacos://${nacos.address}
+    parameters:
+      # 纯消费者时候可以注册上去
+      register-consumer-url: true
+  consumer:
+    # ms
+    timeout: 2000
+    retries: 0
+    tag: consumerTag
+  reference:
+    com.seezoon.protocol.user.server.domain.UserService:
+      # 直连使用url
+      #url: tri://192.168.1.28:9000
+      parameters:
+        # 路由元数据
+        router.meta.set: set1
+        router.meta.idc: idc1
+        router.meta.city: city1
+        # 默认是true
+        router.meta.nearbyRoute: false
+        router.meta.tenant: tenant1
+
+
+
+
+
+
+
