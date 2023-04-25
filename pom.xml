@@ -20,5 +20,6 @@
         <module>protocol</module>
         <module>user-server-app</module>
         <module>user-server-domain</module>
+        <module>spring-cloud-gateway</module>
     </modules>
 </project>

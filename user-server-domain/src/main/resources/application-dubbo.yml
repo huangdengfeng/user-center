@@ -7,10 +7,10 @@ dubbo:
     # 可以省略，代表是有限的协议，部分场景代码判断会优先
     protocol: tri
   protocol:
-    port: 9000
+    port: 8000
     name: tri
-    #host: 192.168.1.28
-    host: 10.43.17.37
+    host: 192.168.1.28
+    #host: 10.43.17.37
   # 注册中心
   registry:
     address: nacos://${nacos.address}
@@ -23,3 +23,4 @@ dubbo:
       meta.idc: idc1
       meta.city: city1
       meta.tenant: tenant1
+

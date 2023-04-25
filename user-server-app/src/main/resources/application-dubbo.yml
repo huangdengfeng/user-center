@@ -13,15 +13,16 @@ dubbo:
     timeout: 2000
     retries: 0
     tag: consumerTag
+    parameters:
+      # 路由元数据
+      router.meta.set: set1
+      router.meta.idc: idc1
+      router.meta.city: city1
   reference:
     com.seezoon.protocol.user.server.domain.UserService:
       # 直连使用url
-      #url: tri://192.168.1.28:9000
+      #url: tri://192.168.1.28:8000
       parameters:
-        # 路由元数据
-        router.meta.set: set1
-        router.meta.idc: idc1
-        router.meta.city: city1
         # 默认是true
         router.meta.nearbyRoute: false
         router.meta.tenant: tenant1

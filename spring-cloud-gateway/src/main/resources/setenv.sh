@@ -2,7 +2,7 @@
 set -e
 # 不指定这获取环境中java命令
 #JAVA_HOME=
-MAIN_CLASS="com.seezoon.user.MainApplication"
+MAIN_CLASS="com.seezoon.MainApplication"
 # 可加入自定的目录
 #CLASS_PATH=""
 LOG_PATH="./logs"
