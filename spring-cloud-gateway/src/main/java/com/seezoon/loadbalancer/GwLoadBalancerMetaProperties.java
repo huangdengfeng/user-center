@@ -1,7 +1,7 @@
 package com.seezoon.loadbalancer;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,7 +36,7 @@ public class GwLoadBalancerMetaProperties {
     /**
      * 对等切换，可以使用配置中心动态下发
      */
-    private List<PeerSet> peerSetSwitch;
+    private ArrayList<PeerSet> peerSetSwitch;
 
     /**
      * 对等切换

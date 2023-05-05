@@ -166,12 +166,14 @@ public class MetaLoadBalancer implements ReactorServiceInstanceLoadBalancer {
         if (StringUtils.isEmpty(currentSet)) {
             return null;
         }
-        List<PeerSet> peerSetSwitch = gwLoadBalancerMetaProperties.getPeerSetSwitch();
+        ArrayList<PeerSet> peerSetSwitch = gwLoadBalancerMetaProperties.getPeerSetSwitch();
         if (CollectionUtils.isEmpty(peerSetSwitch)) {
             return null;
         }
-        log.info("serviceId:{},currentSet:{},peerSetSwitch config:{}", serviceId, currentSet, peerSetSwitch);
-        Optional<PeerSet> first = peerSetSwitch.stream().filter(v -> currentSet.equals(v.getFrom())).findFirst();
+        // 避免变更时候正在遍历
+        ArrayList<PeerSet> cloned = (ArrayList<PeerSet>) peerSetSwitch.clone();
+        log.info("serviceId:{},currentSet:{},peerSetSwitch config:{}", serviceId, currentSet, cloned);
+        Optional<PeerSet> first = cloned.stream().filter(v -> currentSet.equals(v.getFrom())).findFirst();
         return first.orElse(null);
     }
 
