@@ -9,8 +9,8 @@ dubbo:
   protocol:
     port: 8000
     name: tri
-    host: 192.168.1.28
-    #host: 10.43.17.37
+    #host: 192.168.1.28
+    host: 10.43.17.34
   # 注册中心
   registry:
     address: nacos://${nacos.address}
