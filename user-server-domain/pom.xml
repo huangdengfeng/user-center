@@ -49,8 +49,12 @@
             <artifactId>dubbo-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-client</artifactId>
+            <groupId>com.seezoon</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -64,6 +68,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+            <!-- 生成db 代码的，生成目录在target/seezoon-generated -->
+            <plugin>
+                <groupId>com.seezoon.maven.plugins</groupId>
+                <artifactId>seezoon-generator-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 按实际情况填写,如果担心配置污染代码可以去掉configuration采用命令行传参数-->
+                    <url>jdbc:mysql://127.0.0.1:3306/user_db</url>
+                    <username>root</username>
+                    <password>12345678</password>
+                    <tablePrefix>t_</tablePrefix>
+                    <!-- tables下为空则生成全部 -->
+                    <tables>
+                    </tables>
+                </configuration>
             </plugin>
         </plugins>
     </build>

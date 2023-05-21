@@ -15,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
  */
 @Service
 @Validated
-public class UserServiceCaller {
+public class UserServiceRpc {
 
     @DubboReference
     private UserService userService;

@@ -1,6 +1,5 @@
 package com.seezoon.user;
 
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2023/3/4 00:39
  */
 @SpringBootApplication
-@EnableDubbo(scanBasePackages = "com.seezoon.user")
 public class MainApplication {
 
     public static void main(String[] args) {

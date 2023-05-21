@@ -1,6 +1,8 @@
 package com.seezoon.user;
 
+import com.seezoon.mybatis.repository.mapper.BaseMapper;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,13 +13,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2023/3/4 00:39
  */
 @SpringBootApplication
+@MapperScan(basePackages = "com.seezoon.user.domain.repository.mapper", markerInterface = BaseMapper.class)
 @EnableDubbo(scanBasePackages = "com.seezoon.user.interfaces")
 public class MainApplication {
 
     public static void main(String[] args) {
-
-        // for nacos
-        System.setProperty("project.name", "user-server-domain");
         SpringApplication.run(MainApplication.class, args);
     }
 }

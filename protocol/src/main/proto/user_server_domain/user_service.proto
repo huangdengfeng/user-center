@@ -6,7 +6,7 @@ package user.user_server_domain;
 option java_multiple_files = true;
 option java_package = "com.seezoon.protocol.user.server.domain";
 import 'google/protobuf/empty.proto';
-import 'user_server_domain/dto/mobile_register_cmd.proto';
+import 'user_server_domain/dto/mobile_register.proto';
 // 注册
 service UserService {
   rpc MobileRegister(MobileRegisterCmd) returns(google.protobuf.Empty) {};

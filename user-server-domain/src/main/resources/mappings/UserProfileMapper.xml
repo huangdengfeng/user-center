@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.user.domain.repository.mapper.UserProfileMapper">
+    <resultMap id="BaseResultMap" type="com.seezoon.user.domain.repository.po.UserProfilePO">
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="birthday" jdbcType="DATE" property="birthday"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    t.uid,t.name,t.mobile,t.avatar,t.email,t.birthday,t.address,t.create_time,t.update_time
+    </sql>
+
+    <sql id="Query_Table" >
+    t_user_profile t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        where t.uid = #{uid}
+    </select>
+
+    <select id="selectByPrimaryKeyForUpdate" parameterType="Long" resultMap="BaseResultMap">
+            select
+            <include refid="Base_Column_List"/>
+            from <include refid="Query_Table" />
+            where t.uid = #{uid} for update
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.user.domain.repository.po.UserProfilePOCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        <where>
+            <if test="mobile != null and mobile != ''">
+            and t.mobile = #{mobile}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from t_user_profile t
+        where t.uid in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" >
+        insert into t_user_profile (uid,name,mobile,avatar,email,birthday,address,create_time,update_time)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.uid},#{item.name},#{item.mobile},#{item.avatar},#{item.email},#{item.birthday},#{item.address},#{item.createTime},#{item.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.user.domain.repository.po.UserProfilePO">
+        update t_user_profile t
+        <set>
+            <if test="name != null">
+                t.name = #{name},
+            </if>
+            <if test="mobile != null">
+                t.mobile = #{mobile},
+            </if>
+            <if test="avatar != null">
+                t.avatar = #{avatar},
+            </if>
+            <if test="email != null">
+                t.email = #{email},
+            </if>
+            <if test="birthday != null">
+                t.birthday = #{birthday},
+            </if>
+            <if test="address != null">
+                t.address = #{address},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime}
+            </if>
+        </set>
+        where t.uid = #{uid} limit 2
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.user.domain.repository.po.UserProfilePO">
+        update t_user_profile t set
+        t.name = #{name}
+        ,t.mobile = #{mobile}
+        ,t.avatar = #{avatar}
+        ,t.email = #{email}
+        ,t.birthday = #{birthday}
+        ,t.address = #{address}
+        ,t.update_time = #{updateTime}
+        where t.uid = #{uid} limit 2
+    </update>
+</mapper>

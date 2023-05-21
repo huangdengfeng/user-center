@@ -10,18 +10,8 @@ spring:
   mvc:
     servlet:
       load-on-startup: 1
-  cloud:
-    nacos:
-      # http 服务注册
-      discovery:
-        server-addr: ${nacos.address}
-        metadata:
-          meta.set: set2
-          meta.idc: idc1
-          meta.city: city1
-          meta.tenant: tenant1
 server:
-  port: 8090
+  port: 6100
   shutdown: graceful
   tomcat:
     basedir: .

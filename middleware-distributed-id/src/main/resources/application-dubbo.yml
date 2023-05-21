@@ -1,0 +1,14 @@
+dubbo:
+  application:
+    name: ${spring.application.name}
+    # wait ms
+    shut-wait: 30000
+    # 可以省略，代表是有限的协议，部分场景代码判断会优先
+    protocol: tri
+    qos-enable: false
+  protocol:
+    port: 9100
+    name: tri
+    thread-pool: cached
+    core-threads: 0
+    threads: 200

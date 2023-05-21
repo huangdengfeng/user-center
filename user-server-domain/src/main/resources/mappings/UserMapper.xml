@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.user.domain.repository.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.seezoon.user.domain.repository.po.UserPO">
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    t.uid,t.password,t.status,t.create_time,t.update_time
+    </sql>
+
+    <sql id="Query_Table" >
+    t_user t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        where t.uid = #{uid}
+    </select>
+
+    <select id="selectByPrimaryKeyForUpdate" parameterType="Long" resultMap="BaseResultMap">
+            select
+            <include refid="Base_Column_List"/>
+            from <include refid="Query_Table" />
+            where t.uid = #{uid} for update
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.user.domain.repository.po.UserPOCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from t_user t
+        where t.uid in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" >
+        insert into t_user (uid,password,status,create_time,update_time)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.uid},#{item.password},#{item.status},#{item.createTime},#{item.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.user.domain.repository.po.UserPO">
+        update t_user t
+        <set>
+            <if test="password != null">
+                t.password = #{password},
+            </if>
+            <if test="status != null">
+                t.status = #{status},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime}
+            </if>
+        </set>
+        where t.uid = #{uid} limit 2
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.user.domain.repository.po.UserPO">
+        update t_user t set
+        t.password = #{password}
+        ,t.status = #{status}
+        ,t.update_time = #{updateTime}
+        where t.uid = #{uid} limit 2
+    </update>
+</mapper>

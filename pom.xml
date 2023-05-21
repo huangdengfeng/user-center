@@ -22,5 +22,6 @@
         <module>user-server-domain</module>
         <module>external-gateway</module>
         <module>internal-gateway</module>
+        <module>middleware-distributed-id</module>
     </modules>
 </project>
