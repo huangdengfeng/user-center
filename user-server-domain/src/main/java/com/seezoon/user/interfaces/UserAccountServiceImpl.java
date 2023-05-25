@@ -2,7 +2,7 @@ package com.seezoon.user.interfaces;
 
 import com.google.protobuf.Empty;
 import com.seezoon.protocol.user.server.domain.MobileRegisterCmd;
-import com.seezoon.protocol.user.server.domain.UserService;
+import com.seezoon.protocol.user.server.domain.UserAccountService;
 import com.seezoon.user.application.executor.MobileRegisterCmdExe;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -15,7 +15,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  */
 @DubboService
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserAccountServiceImpl implements UserAccountService {
 
     private final MobileRegisterCmdExe mobileRegisterCmdExe;
 

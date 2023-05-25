@@ -7,47 +7,19 @@ spring:
   application:
     name: external-gateway
   cloud:
-    nacos:
-      discovery:
-        server-addr: ${nacos.address}
-        metadata:
-          # 注册的标签
-          meta.set: set1
     gateway:
-      discovery:
-        locator:
-          # 可以直接访问微服务 不用加路由，如/user-server-app/xxxx，自动转发到app应用的xxx http 接口
-          enabled: true
       routes:
         - id: user-server-app
-          #uri: http://127.0.0.1:8090
-          uri: lb://user-server-app
+          uri: http://${user.server.app.address}
           predicates:
             - Path=/user/**
           filters:
             - StripPrefix=1
             - PreserveHostHeader
     loadbalancer:
-      # 自定义的路由及对等切换
-      meta:
-        enable: false
-        set: set1
-        idc: idc1
-        city: city1
-        custom:
-          meta.tenant: tenant1
-        peer-set-switch:
-          - from: set1
-            to: set2
-            rate: 0
       httpclient:
         #https://docs.spring.io/spring-cloud-gateway/docs/3.1.6/reference/html/#http-timeouts-configuration
         connect-timeout: 1000
         response-timeout: 10s
 server:
-  port: 9100
-  http2:
-    # 转发grpc
-    enabled: true
-  ssl:
-    enabled: false
+  port: 9000

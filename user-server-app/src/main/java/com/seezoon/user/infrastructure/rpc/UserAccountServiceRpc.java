@@ -1,7 +1,7 @@
 package com.seezoon.user.infrastructure.rpc;
 
 import com.seezoon.protocol.user.server.domain.MobileRegisterCmd;
-import com.seezoon.protocol.user.server.domain.UserService;
+import com.seezoon.protocol.user.server.domain.UserAccountService;
 import javax.validation.constraints.NotEmpty;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,13 @@ import org.springframework.validation.annotation.Validated;
  */
 @Service
 @Validated
-public class UserServiceRpc {
+public class UserAccountServiceRpc {
 
     @DubboReference
-    private UserService userService;
+    private UserAccountService userAccountService;
 
     public void mobileRegister(long uid, @NotEmpty String mobile, @NotEmpty String code) {
         MobileRegisterCmd cmd = MobileRegisterCmd.newBuilder().setUid(uid).setMobile(mobile).setCode(code).build();
-        userService.mobileRegister(cmd);
+        userAccountService.mobileRegister(cmd);
     }
 }

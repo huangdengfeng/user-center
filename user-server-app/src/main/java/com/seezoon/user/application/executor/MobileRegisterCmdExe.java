@@ -3,7 +3,7 @@ package com.seezoon.user.application.executor;
 import com.seezoon.ddd.dto.Response;
 import com.seezoon.user.application.dto.MobileRegisterCmd;
 import com.seezoon.user.infrastructure.rpc.DistributedIdServiceRpc;
-import com.seezoon.user.infrastructure.rpc.UserServiceRpc;
+import com.seezoon.user.infrastructure.rpc.UserAccountServiceRpc;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ import org.springframework.validation.annotation.Validated;
 public class MobileRegisterCmdExe {
 
     private final DistributedIdServiceRpc distributedIdServiceRpc;
-    private final UserServiceRpc userServiceRpc;
+    private final UserAccountServiceRpc userAccountServiceRpc;
 
     public Response execute(@NotNull @Valid MobileRegisterCmd cmd) {
         // 生成UID
         long uid = distributedIdServiceRpc.genDistributedId(null);
         // UID路由后注册到对应区域
-        userServiceRpc.mobileRegister(uid, cmd.getMobile(), cmd.getCode());
+        userAccountServiceRpc.mobileRegister(uid, cmd.getMobile(), cmd.getCode());
         return Response.success();
     }
 }

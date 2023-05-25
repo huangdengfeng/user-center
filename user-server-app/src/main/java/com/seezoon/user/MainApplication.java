@@ -13,8 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MainApplication {
 
     public static void main(String[] args) {
-        // for nacos
-        System.setProperty("project.name", "user-server-app");
         SpringApplication.run(MainApplication.class, args);
     }
 }

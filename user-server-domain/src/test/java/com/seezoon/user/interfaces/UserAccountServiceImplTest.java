@@ -1,7 +1,7 @@
 package com.seezoon.user.interfaces;
 
 import com.seezoon.protocol.user.server.domain.MobileRegisterCmd;
-import com.seezoon.protocol.user.server.domain.UserService;
+import com.seezoon.protocol.user.server.domain.UserAccountService;
 import com.seezoon.user.BaseSpringApplicationTest;
 import java.io.IOException;
 import java.util.Objects;
@@ -14,10 +14,10 @@ import org.junit.jupiter.api.Test;
  * @author dfenghuang
  * @date 2023/3/22 00:27
  */
-class UserServiceImplTest extends BaseSpringApplicationTest {
+class UserAccountServiceImplTest extends BaseSpringApplicationTest {
 
     @DubboReference
-    private UserService userService;
+    private UserAccountService userAccountService;
 
     public static void main(String[] args) {
         Long i = 1000L;
@@ -28,9 +28,8 @@ class UserServiceImplTest extends BaseSpringApplicationTest {
     @Test
     void mobileRegister() throws IOException {
         MobileRegisterCmd cmd = MobileRegisterCmd.newBuilder().setUid(1000L).setMobile("11111111").build();
-        System.out.println(cmd.toString());
         try {
-            userService.mobileRegister(cmd);
+            userAccountService.mobileRegister(cmd);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

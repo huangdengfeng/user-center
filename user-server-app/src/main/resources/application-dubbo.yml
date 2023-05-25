@@ -12,8 +12,10 @@ dubbo:
     core-threads: 0
     threads: 200
   reference:
-    com.seezoon.protocol.user.server.domain.UserService:
+    com.seezoon.protocol.user.server.domain.UserInfoService:
       url: tri://${user.server.domain.address}
+    com.seezoon.protocol.user.server.domain.UserAccountService:
+      url: tri://${internal.gateway.address}
     com.seezoon.protocol.middleware.distributed.id.DistributedIdService:
       url: tri://${middleware.distributed.id.address}
 
