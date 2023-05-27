@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: user
+  name: user-server-app
+data:
+  application.properties: |-
+    listen.port=6100
+    user.server.domain.address=user-server-domain-${SET}.user
+    internal.gateway.address=internal-gateway-${IDC}.user
+    middleware.distributed.id.address=middleware-distributed-id-${IDC}.user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: user
+  name: user-server-app-${set}
+  labels:
+    idc: ${idc}
+    set: ${set}
+spec:
+  # 默认是，只有集群内部可以访问
+  type: ClusterIP
+  selector:
+    name: user-server-app
+    idc: ${idc}
+    set: ${set}
+  ports:
+    - name: user-server-app-service-port
+      protocol: TCP
+      port: 80
+      # 可以写实际pod中端口，也可以引用端口名称
+      targetPort: dubbo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: user
+  name: user-server-app-${set}
+spec:
+  selector:
+    matchLabels:
+      app: user-server-app
+      version: v1
+      idc: ${idc}
+      set: ${set}
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: user-server-app
+        version: v1
+        idc: ${idc}
+        set: ${set}
+    spec:
+      nodeSelector:
+        layer: application
+        idc: ${idc}
+      containers:
+        - name: user-server-app
+          image: 734839030/user-server-app:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IDC
+              value: ${idc}
+            - name: SET
+              value: ${set}
+          ports:
+            - containerPort: 80
+              name: dubbo
+          volumeMounts:
+            - mountPath: /data/user-server-app/conf/application.properties
+              name: user-server-app-config-volume
+              subPath: application.properties
+      volumes:
+        - name: user-server-app-config-volume
+          configMap:
+            name: user-server-app
+            items:
+              - key: application.properties
+                path: application.properties
+
+

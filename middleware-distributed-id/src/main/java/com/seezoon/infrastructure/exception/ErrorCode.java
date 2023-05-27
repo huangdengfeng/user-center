@@ -17,7 +17,7 @@ public enum ErrorCode implements ErrorDefinition {
 
     AUTH_FAILED(203, "auth failed");
 
-    private static final int prefix = 9000 << 3;
+    private static final int prefix = 90000 << 3;
 
     private int code;
     private String msg;

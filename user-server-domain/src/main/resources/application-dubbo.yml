@@ -7,7 +7,7 @@ dubbo:
     protocol: tri
     qos-enable: false
   protocol:
-    port: 6200
+    port: ${listen.port}
     name: tri
     thread-pool: cached
     core-threads: 0

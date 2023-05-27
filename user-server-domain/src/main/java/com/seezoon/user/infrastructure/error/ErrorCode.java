@@ -22,7 +22,7 @@ public enum ErrorCode implements ErrorDefinition {
     UID_USED(201, "UID已注册");
 
 
-    private static final int prefix = 1000 << 3;
+    private static final int prefix = 21000 << 3;
     private int code;
     private String msg;
 

@@ -21,7 +21,7 @@ spring:
         connect-timeout: 1000
         response-timeout: 10s
 server:
-  port: 9200
+  port: ${listen.port}
   http2:
     # 转发grpc
     enabled: true

@@ -22,4 +22,4 @@ spring:
         connect-timeout: 1000
         response-timeout: 10s
 server:
-  port: 9000
+  port: ${listen.port}

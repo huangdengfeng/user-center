@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: user
+  name: middleware-distributed-id
+data:
+  application.properties: |-
+    listen.port=80
+    user_db.host=docker.for.mac.host.internal
+    user_db.port=3306
+    user_db.user=root
+    user_db.password=12345678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: user
+  name: middleware-distributed-id-${idc}
+  labels:
+    idc: ${idc}
+spec:
+  # 默认是，只有集群内部可以访问
+  type: ClusterIP
+  selector:
+    name: middleware-distributed-id
+    idc: ${idc}
+  ports:
+    - name: middleware-distributed-id-service-port
+      protocol: TCP
+      port: 80
+      # 可以写实际pod中端口，也可以引用端口名称
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: user
+  name: middleware-distributed-id-${idc}
+spec:
+  selector:
+    matchLabels:
+      app: middleware-distributed-id
+      version: v1
+      idc: ${idc}
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: middleware-distributed-id
+        version: v1
+        idc: ${idc}
+    spec:
+      nodeSelector:
+        layer: application
+        idc: ${idc}
+      containers:
+        - name: middleware-distributed-id
+          image: 734839030/middleware-distributed-id:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IDC
+              value: ${idc}
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /data/middleware-distributed-id/conf/application.properties
+              name: middleware-distributed-id-config-volume
+              subPath: application.properties
+      volumes:
+        - name: middleware-distributed-id-config-volume
+          configMap:
+            name: middleware-distributed-id
+            items:
+              - key: application.properties
+                path: application.properties
+
+

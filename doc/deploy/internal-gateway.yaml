@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: user
+  name: internal-gateway
+data:
+  application.properties: |-
+    listen.port=80
+    user.server.domain.address=user-server-domain-user-set00.user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: user
+  name: internal-gateway-${idc}
+  labels:
+    idc: ${idc}
+spec:
+  # 默认是，只有集群内部可以访问
+  type: ClusterIP
+  selector:
+    name: internal-gateway
+    idc: ${idc}
+  ports:
+    - name: internal-gateway-service-port
+      protocol: TCP
+      port: 80
+      # 可以写实际pod中端口，也可以引用端口名称
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: user
+  name: internal-gateway-${idc}
+spec:
+  selector:
+    matchLabels:
+      app: internal-gateway
+      version: v1
+      idc: ${idc}
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: internal-gateway
+        version: v1
+        idc: ${idc}
+    spec:
+      nodeSelector:
+        layer: application
+        idc: ${idc}
+      containers:
+        - name: internal-gateway
+          image: 734839030/internal-gateway:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IDC
+              value: ${idc}
+          ports:
+            - containerPort: 80
+              name: http
+          volumeMounts:
+            - mountPath: /data/internal-gateway/conf/application.properties
+              name: internal-gateway-config-volume
+              subPath: application.properties
+      volumes:
+        - name: internal-gateway-config-volume
+          configMap:
+            name: internal-gateway
+            items:
+              - key: application.properties
+                path: application.properties
+
+
