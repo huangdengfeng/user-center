@@ -22,7 +22,7 @@ spec:
   # 默认是，只有集群内部可以访问
   type: ClusterIP
   selector:
-    name: middleware-distributed-id
+    app: middleware-distributed-id
     idc: ${idc}
   ports:
     - name: middleware-distributed-id-service-port

@@ -12,7 +12,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MainApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MainApplication.class, args);
+    public static void main(String[] args) throws InterruptedException {
+        try {
+            SpringApplication.run(MainApplication.class, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Thread.sleep(1000000000);
+        }
     }
 }

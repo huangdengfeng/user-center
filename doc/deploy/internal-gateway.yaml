@@ -6,7 +6,7 @@ metadata:
 data:
   application.properties: |-
     listen.port=80
-    user.server.domain.address=user-server-domain-user-set00.user
+    user.server.domain.address=user-server-domain.user
 ---
 apiVersion: v1
 kind: Service
@@ -19,7 +19,7 @@ spec:
   # 默认是，只有集群内部可以访问
   type: ClusterIP
   selector:
-    name: internal-gateway
+    app: internal-gateway
     idc: ${idc}
   ports:
     - name: internal-gateway-service-port

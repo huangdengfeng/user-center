@@ -94,7 +94,7 @@ kubectl get -h
 # 常用命令总结
 # 支持缩写 个人习惯全写免得混淆 deployments == deploy nodes == no services == svc
 kubectl get all -n namespace
-kubectl get deployments|nodes|pods|services|rs|configMap [name]  [-A 全部空间] [-n 指定空间] -o wide [--show-labels 展示标签] 
+kubectl get deployments|nodes|pods|services|rs|configMap [name]  [-A 全部空间] [-n 指定空间] -o wide [--show-labels 展示标签] [-l k=v,k1=v1 选择label]
 kubectl describe deployments|nodes|pods|services|rs|configMap  name -n 空间
 kubectl delete deployments|nodes|pods|services|rs|configMap name -n namespace
 kubectl edit deployments|nodes|pods|services|rs|configMap name -n namespace
@@ -110,6 +110,8 @@ kubectl get pod mypod -o yaml -n 空间  | kubectl replace -f -
 kubectl rollout  restart deployment|daemonset/name -n 空间
 # 临时测试下pod或service 中的端口
 kubectl port-forward pod|service/name -n 空间  --address 0.0.0.0 主机端口:pod或service端口
+# 基于镜像快速创建pod
+kubectl run -it [pod-name] --image=centos --rm  --command -- <cmd> <arg1> ... <argN>
 ```
 
 ### 创建项目命名空间
@@ -165,11 +167,33 @@ kubectl label nodes <your-node-name> <key1>- <key2>-
 配置手册大全
 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/
 
+## 部署模版中变量
+
+已模版中需要idc为例： ${idc} 在编排全就需要替换；编排前需要注入的用小写；
+**使用`envsubst`命令处理**
+
+```shell
+export idc=sz-idc1 && envsubst < xxx.yaml | kubectl apply -f -
+```
+
+`envsubst`缺点是会把${XXX}的都处理，不存在的则换成字符串，如果我们configMap 中有这个格式就会误伤。
+**使用`sed`**
+
+```shell
+# 语法将search全部替换成replace
+sed -e s/search/replace/g file
+```
+
+```shell
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  xxx.yaml | kubectl apply -f -
+
+```
+
 ### external-gateway 外网网关
 
 > 按IDC部署
 
-k8s service: external-gateway-${idc}.user
+k8s service: external-gateway-${IDC}.user
 
 ```shell
 # 可以处理模版
@@ -178,15 +202,11 @@ export idc=sz-idc1 &&  envsubst < external-gateway.yaml | kubectl apply -f -
 kubectl apply -f external-gateway.yaml
 ```
 
-- 创建configMap：挂载配置
-- 创建deployment：部署
-- 创建service：使用DNS访问(servcie.namespace)，`external-gateway.user`
-
 ### internal-gateway 内网网关
 
 > 按IDC部署
 
-k8s service: internal-gateway-${idc}.user
+k8s service: internal-gateway-${IDC}.user
 
 ```shell
 # 可以处理模版
@@ -199,7 +219,7 @@ kubectl apply -f internal-gateway.yaml
 
 > 按IDC部署
 
-k8s service: middleware-distributed-id-${idc}.user
+k8s service: middleware-distributed-id-${IDC}.user
 
 ```shell
 # 可以处理模版
@@ -208,7 +228,7 @@ export idc=sz-idc1 &&  envsubst < middleware-distributed-id.yaml | kubectl apply
 kubectl apply -f middleware-distributed-id.yaml
 ```
 
-### user-server-app 用户领域服务
+### user-server-app 用户应用服务
 
 > 按SET部署
 
@@ -216,7 +236,20 @@ k8s service: user-server-app-${set}.user
 
 ```shell
 # 可以处理模版
-export idc=sz-idc1 && export set=user-set00  &&  envsubst < user-server-app.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  user-server-app.yaml | kubectl apply -f -
 # 使用这种需要手动修改模版汇总占位符
 kubectl apply -f user-server-app.yaml
+```
+
+### user-server-domain 用户领域服务
+
+> 按SET部署
+
+k8s service: user-server-domain-${set}.user
+
+```shell
+# 可以处理模版
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  user-server-domain.yaml | kubectl apply -f -
+# 使用这种需要手动修改模版汇总占位符
+kubectl apply -f user-server-domain.yaml
 ```

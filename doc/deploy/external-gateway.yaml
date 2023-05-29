@@ -6,7 +6,26 @@ metadata:
 data:
   application.properties: |-
     listen.port=80
-    user.server.app.address=user-server-app-user-set00.user
+    user.server.app.address=user-server-app.user
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: user
+  name: external-gateway
+  labels:
+    idc: ${idc}
+spec:
+  # 默认是，只有集群内部可以访问
+  type: ClusterIP
+  selector:
+    app: external-gateway
+  ports:
+    - name: external-gateway-service-port
+      protocol: TCP
+      port: 80
+      # 可以写实际pod中端口，也可以引用端口名称
+      targetPort: http
 ---
 apiVersion: v1
 kind: Service
@@ -19,7 +38,7 @@ spec:
   # 默认是，只有集群内部可以访问
   type: ClusterIP
   selector:
-    name: external-gateway
+    app: external-gateway
     idc: ${idc}
   ports:
     - name: external-gateway-service-port

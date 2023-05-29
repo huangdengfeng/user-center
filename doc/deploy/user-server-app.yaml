@@ -5,10 +5,27 @@ metadata:
   name: user-server-app
 data:
   application.properties: |-
-    listen.port=6100
-    user.server.domain.address=user-server-domain-${SET}.user
-    internal.gateway.address=internal-gateway-${IDC}.user
-    middleware.distributed.id.address=middleware-distributed-id-${IDC}.user
+    listen.port=80
+    user.server.domain.address=user-server-domain-${SET}.user:80
+    internal.gateway.address=internal-gateway-${IDC}.user:80
+    middleware.distributed.id.address=middleware-distributed-id-${IDC}.user:80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: user
+  name: user-server-app
+spec:
+  # 默认是，只有集群内部可以访问
+  type: ClusterIP
+  selector:
+    app: user-server-app
+  ports:
+    - name: user-server-app-service-port
+      protocol: TCP
+      port: 80
+      # 可以写实际pod中端口，也可以引用端口名称
+      targetPort: dubbo
 ---
 apiVersion: v1
 kind: Service
@@ -22,7 +39,7 @@ spec:
   # 默认是，只有集群内部可以访问
   type: ClusterIP
   selector:
-    name: user-server-app
+    app: user-server-app
     idc: ${idc}
     set: ${set}
   ports:
