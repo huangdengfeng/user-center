@@ -108,6 +108,8 @@ kubectl delete -f  deployment.yaml
 kubectl get pod mypod -o yaml -n 空间  | kubectl replace -f -
 # 重启
 kubectl rollout  restart deployment|daemonset/name -n 空间
+# 调整实例
+kubectl scale deployment/name -n 空间 --replicas=4
 # 临时测试下pod或service 中的端口
 kubectl port-forward pod|service/name -n 空间  --address 0.0.0.0 主机端口:pod或service端口
 # 基于镜像快速创建pod
