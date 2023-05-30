@@ -106,6 +106,8 @@ kubectl apply -f  config_map.yaml deployment.yaml service.yaml
 kubectl delete -f  deployment.yaml
 # 重建
 kubectl get pod mypod -o yaml -n 空间  | kubectl replace -f -
+# 查看pod 资源消耗
+kubectl top pod podname -n 空间
 # 重启
 kubectl rollout  restart deployment|daemonset/name -n 空间
 # 调整实例
