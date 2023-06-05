@@ -62,7 +62,7 @@ spec:
       version: v1
       idc: ${idc}
       set: ${set}
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -83,8 +83,9 @@ spec:
               cpu: "8"
               memory: 2000Mi
             requests:
-              cpu: "0.5"
-              memory: 128Mi
+              # 0.1 = 100m 填任意单位都可以
+              cpu: "1m"
+              memory: 1Mi
           # 在另外两个之前执行
           startupProbe:
             tcpSocket:

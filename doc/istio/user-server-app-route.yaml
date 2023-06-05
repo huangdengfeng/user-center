@@ -1,0 +1,80 @@
+# 外网网关调用user-server-app 路由选择条带，VirtualService 不依赖DestinationRule也可以，不使用subset 就是直接转发
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  namespace: user
+  name: user-server-app
+spec:
+  hosts:
+    - user-server-app.user.svc.cluster.local
+  http:
+    - name: user-set00
+      match:
+        - headers:
+            user-set:
+              exact: user-set00
+      route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            subset: user-set00
+            port:
+              number: 80
+    - name: user-set01
+      match:
+        - headers:
+            user-set:
+              exact: user-set01
+      route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            subset: user-set01
+            port:
+              number: 80
+    - name: user-set10
+      match:
+        - headers:
+            user-set:
+              exact: user-set10
+      route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            subset: user-set10
+            port:
+              number: 80
+    - name: user-set11
+      match:
+        - headers:
+            user-set:
+              exact: user-set11
+      route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            subset: user-set11
+            port:
+              number: 80
+    - route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            port:
+              number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  namespace: user
+  name: user-server-app
+spec:
+  host: user-server-app.user.svc.cluster.local
+  subsets:
+    - name: user-set00
+      labels:
+        set: user-set00
+    - name: user-set01
+      labels:
+        set: user-set01
+    - name: user-set10
+      labels:
+        set: user-set10
+    - name: user-set11
+      labels:
+        set: user-set11

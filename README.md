@@ -94,7 +94,7 @@ kubectl get -h
 # 常用命令总结
 # 支持缩写 个人习惯全写免得混淆 deployments == deploy nodes == no services == svc
 kubectl get all -n namespace
-kubectl get deployments|nodes|pods|services|rs|configMap [name]  [-A 全部空间] [-n 指定空间] -o wide [--show-labels 展示标签] [-l k=v,k1=v1 选择label]
+kubectl get deployments|nodes|pods|services|rs|configMap|crd [name]  [-A 全部空间] [-n 指定空间] -o wide [--show-labels 展示标签] [-l k=v,k1=v1 选择label]
 kubectl describe deployments|nodes|pods|services|rs|configMap  name -n 空间
 kubectl delete deployments|nodes|pods|services|rs|configMap name -n namespace
 kubectl edit deployments|nodes|pods|services|rs|configMap name -n namespace
@@ -114,7 +114,7 @@ kubectl rollout  restart deployment|daemonset/name -n 空间
 kubectl scale deployment/name -n 空间 --replicas=4
 # 临时测试下pod或service 中的端口
 kubectl port-forward pod|service/name -n 空间  --address 0.0.0.0 主机端口:pod或service端口
-# 基于镜像快速创建pod
+# 基于镜像快速创建pod,一般用于快速模拟pod环境查问题
 kubectl run -it [pod-name] --image=centos --rm  --command -- <cmd> <arg1> ... <argN>
 ```
 
@@ -193,6 +193,12 @@ sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  xxx.yaml | kubectl appl
 
 ```
 
+### 公共说明
+
+- POD之间调用service 名字可以省略 `svc.cluster.local`，istio中则不能省略
+- 不注册istio sidecar需要再pod加入 annotations `sidecar.istio.io/inject: "false"`
+- 模拟环境无法模拟多IDC,采用单idc=sz-idc1代替
+
 ### external-gateway 外网网关
 
 > 按IDC部署
@@ -241,6 +247,9 @@ k8s service: user-server-app-${set}.user
 ```shell
 # 可以处理模版
 sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  user-server-app.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set01/g'  user-server-app.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set10/g'  user-server-app.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set11/g'  user-server-app.yaml | kubectl apply -f -
 # 使用这种需要手动修改模版汇总占位符
 kubectl apply -f user-server-app.yaml
 ```
@@ -254,6 +263,56 @@ k8s service: user-server-domain-${set}.user
 ```shell
 # 可以处理模版
 sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  user-server-domain.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set01/g'  user-server-domain.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set10/g'  user-server-domain.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set11/g'  user-server-domain.yaml | kubectl apply -f -
 # 使用这种需要手动修改模版汇总占位符
 kubectl apply -f user-server-domain.yaml
+```
+
+## 安装istio
+
+https://istio.io/latest/docs/setup/getting-started/
+https://istio.io/latest/docs/setup/install/istioctl/
+
+```shell
+# 执行完成后安装在用户木目录
+curl -L https://istio.io/downloadIstio | sh -
+# 添加环境变量linux /etc/profile 下，下面命令替换您的安装目录
+export PATH="$PATH:/Users/huangdengfeng/istio-1.17.2/bin"
+# 执行检查
+istioctl x precheck
+# 安装
+istioctl install
+# 查看
+kubectl  get deployments -n istio-system
+```
+
+## 安装kiali看板（可选）
+
+https://kiali.io/docs/installation/quick-start/
+
+```shell
+# 安装
+kubectl apply -f ${ISTIO_HOME}/samples/addons/kiali.yaml
+# 可选，实际安装后kiali 才有调用数据
+kubectl apply -f ${ISTIO_HOME}/samples/addons/prometheus.yaml
+# 访问 localhost:20001
+kubectl port-forward svc/kiali 20001:20001 -n istio-system
+
+```
+
+## 使用istio
+
+```shell
+# 给user命名空间下，添加istio 自动注入
+$ kubectl label namespace user istio-injection=enabled
+```
+
+配置手册：https://istio.io/latest/docs/reference/config/
+istio sidecar: https://istio.io/latest/zh/docs/ops/diagnostic-tools/istioctl/
+
+```shell
+# 问题分析
+istioctl analyze --namespace user
 ```

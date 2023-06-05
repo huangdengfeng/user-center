@@ -42,7 +42,7 @@ spec:
       app: middleware-distributed-id
       version: v1
       idc: ${idc}
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:

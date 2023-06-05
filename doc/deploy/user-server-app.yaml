@@ -61,9 +61,11 @@ spec:
       version: v1
       idc: ${idc}
       set: ${set}
-  replicas: 2
+  replicas: 1
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
       labels:
         app: user-server-app
         version: v1

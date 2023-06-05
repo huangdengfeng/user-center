@@ -39,7 +39,7 @@ spec:
       app: internal-gateway
       version: v1
       idc: ${idc}
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
