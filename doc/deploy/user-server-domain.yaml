@@ -6,7 +6,7 @@ metadata:
 data:
   application.properties: |-
     listen.port=80
-    user_db.host=docker.for.mac.host.internal
+    user_db.host=192.168.1.28
     user_db.port=3306
     user_db.user=root
     user_db.password=12345678

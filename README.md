@@ -196,8 +196,9 @@ sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  xxx.yaml | kubectl appl
 ### 公共说明
 
 - POD之间调用service 名字可以省略 `svc.cluster.local`，istio中则不能省略
-- 不注册istio sidecar需要再pod加入 annotations `sidecar.istio.io/inject: "false"`
+- 不注册istio sidecar需要再pod加入 annotations `sidecar.istio.io/inject: "false"`，新版本推荐加载lables下
 - 模拟环境无法模拟多IDC,采用单idc=sz-idc1代替
+- configmap 采用文件挂载的方式，不会实时刷新到pod，挂载目录可以
 
 ### external-gateway 外网网关
 

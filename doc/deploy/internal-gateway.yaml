@@ -6,7 +6,7 @@ metadata:
 data:
   application.properties: |-
     listen.port=80
-    user.server.domain.address=user-server-domain.user
+    user.server.domain.address=user-server-domain.user:80
 ---
 apiVersion: v1
 kind: Service
