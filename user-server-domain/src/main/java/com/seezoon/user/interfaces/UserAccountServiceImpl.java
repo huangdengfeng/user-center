@@ -1,14 +1,14 @@
 package com.seezoon.user.interfaces;
 
-import com.google.protobuf.Empty;
-import com.seezoon.protocol.user.server.domain.MobileRegisterCmd;
-import com.seezoon.protocol.user.server.domain.UserAccountService;
-import com.seezoon.user.application.executor.MobileRegisterCmdExe;
+import com.seezoon.user.application.executor.MobileRegisterExe;
+import com.seezoon.user.server.domain.stub.MobileRegisterReq;
+import com.seezoon.user.server.domain.stub.MobileRegisterResp;
+import com.seezoon.user.server.domain.stub.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;
 
 /**
- * 用户服务
+ * 用户账号服务
  *
  * @author dfenghuang
  * @date 2023/3/21 23:50
@@ -17,10 +17,10 @@ import org.apache.dubbo.config.annotation.DubboService;
 @RequiredArgsConstructor
 public class UserAccountServiceImpl implements UserAccountService {
 
-    private final MobileRegisterCmdExe mobileRegisterCmdExe;
+    private final MobileRegisterExe mobileRegisterExe;
 
     @Override
-    public Empty mobileRegister(MobileRegisterCmd request) {
-        return mobileRegisterCmdExe.execute(request);
+    public MobileRegisterResp mobileRegister(MobileRegisterReq req) {
+        return mobileRegisterExe.execute(req);
     }
 }

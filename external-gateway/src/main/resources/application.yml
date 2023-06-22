@@ -1,7 +1,8 @@
 spring:
   profiles:
     # 环境标识，本机开发环境有意义,如果觉得污染,可以IDEA 传入--spring.profiles.active=local
-    active: local
+    active: local,rule-local
+    include: rule
   lifecycle:
     timeout-per-shutdown-phase: 30s
   application:
@@ -16,6 +17,14 @@ spring:
           filters:
             - StripPrefix=1
             - PreserveHostHeader
+            - name: Session
+              args:
+                # 从session提取到用户信息头部
+                userHeader: x-user-id
+                # 不验证登录态
+                excludes: /public/**,/login
+            - AddRequestHeader=x-route-idc, ${deploy.idc}
+            - AddRouterHeader
     loadbalancer:
       httpclient:
         #https://docs.spring.io/spring-cloud-gateway/docs/3.1.6/reference/html/#http-timeouts-configuration

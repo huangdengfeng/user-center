@@ -1,7 +1,8 @@
 spring:
   profiles:
     # 环境标识，本机开发环境有意义,如果觉得污染,可以IDEA 传入--spring.profiles.active=local
-    active: local
+    active: local,rule-local
+    include: rule
   lifecycle:
     timeout-per-shutdown-phase: 30s
   application:
@@ -12,9 +13,11 @@ spring:
         - id: grpc
           uri: http://${user.server.domain.address}
           predicates:
-            - Path=/com.seezoon.protocol.user.server.domain.UserAccountService/**
+            - Path=/com.seezoon.user.server.domain.stub.UserAccountService/**
           filters:
             - PreserveHostHeader
+            - AddRequestHeader=x-idc,${deploy.idc}
+            - AddRouterHeader
     loadbalancer:
       httpclient:
         #https://docs.spring.io/spring-cloud-gateway/docs/3.1.6/reference/html/#http-timeouts-configuration

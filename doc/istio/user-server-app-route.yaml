@@ -52,6 +52,18 @@ spec:
             subset: user-set11
             port:
               number: 80
+    - name: sz-idc1
+      match:
+        - headers:
+            idc:
+              exact: sz-idc1
+      route:
+        - destination:
+            host: user-server-app.user.svc.cluster.local
+            subset: sz-idc1
+            port:
+              number: 80
+    # 兜底路由，一般不需要
     - route:
         - destination:
             host: user-server-app.user.svc.cluster.local
@@ -78,3 +90,6 @@ spec:
     - name: user-set11
       labels:
         set: user-set11
+    - name: sz-idc1
+      labels:
+        idc: sz-idc1

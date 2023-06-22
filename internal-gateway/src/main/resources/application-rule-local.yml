@@ -1,0 +1,18 @@
+router:
+  items:
+    - src-header: x-user-id
+      dst-header: x-user-set
+      segment-length: 2
+      rules:
+        - start: 00
+          end: 24
+          set: user-set00
+        - start: 25
+          end: 49
+          set: user-set01
+        - start: 50
+          end: 74
+          set: user-set10
+        - start: 75
+          end: 99
+          set: user-set11

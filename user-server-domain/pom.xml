@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.seezoon.protocol</groupId>
-            <artifactId>protocol</artifactId>
+            <artifactId>user-server-domain-stub</artifactId>
             <version>${protocol.version}</version>
         </dependency>
         <dependency>

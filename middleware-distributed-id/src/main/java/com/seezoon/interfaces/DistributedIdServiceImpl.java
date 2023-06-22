@@ -1,9 +1,9 @@
 package com.seezoon.interfaces;
 
 import com.seezoon.application.SegmentService;
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdCO;
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdCmd;
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdService;
+import com.seezoon.middleware.distributed.id.stub.DistributedIdService;
+import com.seezoon.middleware.distributed.id.stub.GenDistributedIdReq;
+import com.seezoon.middleware.distributed.id.stub.GenDistributedIdResp;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboService;
 
@@ -18,8 +18,9 @@ public class DistributedIdServiceImpl implements DistributedIdService {
     private final SegmentService segmentService;
 
     @Override
-    public DistributedIdCO genDistributedId(DistributedIdCmd request) {
+    public GenDistributedIdResp genDistributedId(GenDistributedIdReq request) {
         long id = segmentService.getId(request.getBizTag(), request.getToken());
-        return DistributedIdCO.newBuilder().setValue(id).build();
+        return GenDistributedIdResp.newBuilder().setValue(id).build();
     }
+
 }

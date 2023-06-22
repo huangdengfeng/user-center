@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -28,13 +29,14 @@ import org.springframework.validation.annotation.Validated;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@Transactional
 public class MobileRegisterService {
 
     private final UserRepository userRepository;
     private final RelationRepository relationRepository;
     private final UserProfileRepository userProfileRepository;
 
-    public void register(@NotNull Long uid, @NotEmpty String mobile) {
+    public long register(@NotNull Long uid, @NotEmpty String mobile) {
         UserPO userPO = userRepository.findForUpdate(uid);
         if (null != userPO) {
             log.error("mobile register error due to uid [{}] used", uid);
@@ -54,6 +56,7 @@ public class MobileRegisterService {
         userProfilePO.setUid(uid);
         userProfilePO.setMobile(mobile);
         userProfileRepository.save(userProfilePO);
+        return uid;
     }
 
     private void createUser(Long uid) {

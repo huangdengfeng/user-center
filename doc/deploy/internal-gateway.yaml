@@ -6,6 +6,7 @@ metadata:
 data:
   application.properties: |-
     listen.port=80
+    deploy.idc=${IDC}
     user.server.domain.address=user-server-domain.user:80
 ---
 apiVersion: v1

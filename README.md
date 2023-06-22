@@ -25,6 +25,7 @@
 
 set命名：业务加set+两位编号，十位基本代表城市，同一个城市用一个数字。
 约定0：深圳，1：上海
+错误类型：1 系统错误，2 业务错误。错误码组成：前缀 + 类型 + 三位错误码
 
 ### 用户SET 划分
 
@@ -199,6 +200,7 @@ sed  -e 's/${idc}/sz-idc1/g' -e 's/${set}/user-set00/g'  xxx.yaml | kubectl appl
 - 不注册istio sidecar需要再pod加入 annotations `sidecar.istio.io/inject: "false"`，新版本推荐加载lables下
 - 模拟环境无法模拟多IDC,采用单idc=sz-idc1代替
 - configmap 采用文件挂载的方式，不会实时刷新到pod，挂载目录可以
+- 环境变量用大写
 
 ### external-gateway 外网网关
 
@@ -208,7 +210,7 @@ k8s service: external-gateway-${IDC}.user
 
 ```shell
 # 可以处理模版
-export idc=sz-idc1 &&  envsubst < external-gateway.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' external-gateway.yaml | kubectl apply -f -
 # 使用这种需要手动修改模版汇总占位符
 kubectl apply -f external-gateway.yaml
 ```
@@ -221,7 +223,7 @@ k8s service: internal-gateway-${IDC}.user
 
 ```shell
 # 可以处理模版
-export idc=sz-idc1 &&  envsubst < internal-gateway.yaml | kubectl apply -f -
+sed  -e 's/${idc}/sz-idc1/g' internal-gateway.yaml | kubectl apply -f -
 # 使用这种需要手动修改模版汇总占位符
 kubectl apply -f internal-gateway.yaml
 ```

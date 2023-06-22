@@ -8,21 +8,15 @@ import com.seezoon.ddd.exception.ErrorDefinition;
 public enum ErrorCode implements ErrorDefinition {
 
 
-    UNKOWN(100, "system error：%s"),
-
-    SQL_ERROR(101, "sql error：%s"),
-
-    PARAM_INVALID(102, "param invalid：%s"),
-    CALL_REMOTE_RPC_ERROR(103, "call remote error：%s"),
-    /**
-     * 业务错误
-     */
-    USER_STATUS_INVALID(206, "用户状态不正常"),
-
-    UID_USED(201, "UID已注册");
+    UNKOWN(1100, "system error：%s"),
+    SQL_ERROR(1101, "sql error：%s"),
+    PARAM_INVALID(1102, "param invalid：%s"),
+    CALL_REMOTE_RPC_ERROR(1103, "call remote error：%s"),
+    USER_STATUS_INVALID(2206, "用户状态不正常"),
+    UID_USED(2201, "UID已注册");
 
 
-    private static final int prefix = 21000 << 3;
+    private static final int prefix = 21000 * 1000;
     private int code;
     private String msg;
 

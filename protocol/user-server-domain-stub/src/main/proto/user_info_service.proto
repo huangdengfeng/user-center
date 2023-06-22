@@ -1,0 +1,14 @@
+// 用户领域服务
+syntax = "proto3";
+// app.server
+package user.user_server_domain;
+
+option java_multiple_files = true;
+option java_package = "com.seezoon.user.server.domain.stub";
+import 'dto/qry_user_profile.proto';
+// 条带内可完成的服务
+service UserInfoService {
+  // 用户不存在会抛出错误码
+  rpc QryUserProfile(QryUserProfileReq) returns(QryUserProfileResp) {};
+}
+

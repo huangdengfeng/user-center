@@ -1,8 +1,8 @@
 package com.seezoon.user.infrastructure.rpc;
 
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdCO;
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdCmd;
-import com.seezoon.protocol.middleware.distributed.id.DistributedIdService;
+import com.seezoon.middleware.distributed.id.stub.DistributedIdService;
+import com.seezoon.middleware.distributed.id.stub.GenDistributedIdReq;
+import com.seezoon.middleware.distributed.id.stub.GenDistributedIdResp;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,12 @@ public class DistributedIdServiceRpc {
     private DistributedIdService distributedIdService;
 
     public long genDistributedId(String token) {
-        DistributedIdCmd cmd = DistributedIdCmd.newBuilder().setBizTag(bigTag)
+        GenDistributedIdReq req = GenDistributedIdReq.newBuilder().setBizTag(bigTag)
                 .setToken(StringUtils.trimToEmpty(token)).build();
-        DistributedIdCO distributedIdCO = distributedIdService.genDistributedId(cmd);
-        if (distributedIdCO.getValue() <= 0) {
+        GenDistributedIdResp resp = distributedIdService.genDistributedId(req);
+        if (resp.getValue() <= 0) {
             throw new IllegalArgumentException("genDistributedId must > 0 ");
         }
-        return distributedIdCO.getValue();
+        return resp.getValue();
     }
 }

@@ -22,9 +22,15 @@
     <dependencies>
         <dependency>
             <groupId>com.seezoon.protocol</groupId>
-            <artifactId>protocol</artifactId>
+            <artifactId>middleware-distributed-id-stub</artifactId>
             <version>${protocol.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.seezoon.protocol</groupId>
+            <artifactId>user-server-domain-stub</artifactId>
+            <version>${protocol.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

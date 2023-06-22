@@ -1,0 +1,12 @@
+syntax = "proto3";
+package middleware.distributed_id;;
+
+option java_package = "com.seezoon.middleware.distributed.id.stub";
+option java_multiple_files = true;
+import 'dto/gen_distributed_id.proto';
+
+service DistributedIdService {
+  rpc GenDistributedId(GenDistributedIdReq) returns (GenDistributedIdResp);
+}
+
+

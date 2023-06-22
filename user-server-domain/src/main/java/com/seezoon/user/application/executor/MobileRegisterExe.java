@@ -1,9 +1,9 @@
 package com.seezoon.user.application.executor;
 
-import com.google.protobuf.Empty;
 import com.seezoon.dubbo.utils.PbToJson;
-import com.seezoon.protocol.user.server.domain.MobileRegisterCmd;
 import com.seezoon.user.domain.service.MobileRegisterService;
+import com.seezoon.user.server.domain.stub.MobileRegisterReq;
+import com.seezoon.user.server.domain.stub.MobileRegisterResp;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,19 +20,22 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @Slf4j
 @RequiredArgsConstructor
-public class MobileRegisterCmdExe {
+public class MobileRegisterExe {
 
     private final MobileRegisterService mobileRegisterService;
 
-    public Empty execute(@NotNull MobileRegisterCmd cmd) {
+    public MobileRegisterResp execute(@NotNull MobileRegisterReq req) {
         if (log.isDebugEnabled()) {
-            log.debug("mobile register cmd:{}", PbToJson.toJson(cmd));
+            log.debug("mobile register req:{}", PbToJson.toJson(req));
         }
         // TODO 远程服务校验短信
-
         // 注册
-        mobileRegisterService.register(cmd.getUid(), cmd.getMobile());
-        return Empty.newBuilder().build();
+        long uid = mobileRegisterService.register(req.getUid(), req.getMobile());
+        MobileRegisterResp resp = MobileRegisterResp.newBuilder().setUid(uid).build();
+        if (log.isDebugEnabled()) {
+            log.debug("mobile register resp:{}", PbToJson.toJson(resp));
+        }
+        return resp;
     }
 }
 
