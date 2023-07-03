@@ -14,4 +14,8 @@ public class UserProfileQry {
 
     @NotNull
     private Long uid;
+
+    public UserProfileQry(Long uid) {
+        this.uid = uid;
+    }
 }

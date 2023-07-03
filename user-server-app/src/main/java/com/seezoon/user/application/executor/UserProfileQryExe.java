@@ -40,7 +40,7 @@ public class UserProfileQryExe {
         co.setMobile(userProfile.getMobile());
         co.setAvatar(userProfile.getAvatar());
         co.setEmail(userProfile.getEmail());
-        co.setBirthday(null);
+        co.setBirthday(PbTimestampUtil.toLocalDate(userProfile.getBirthday()));
         co.setAddress(userProfile.getAddress());
         co.setCreateTime(PbTimestampUtil.toLocalDateTime(userProfile.getCreateTime()));
         return Response.success(co);
