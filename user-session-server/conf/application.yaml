@@ -1,0 +1,36 @@
+server: user-session-server
+log:
+  filename: logs/app.log
+  # M
+  maxSize: 1024
+  # Day
+  maxAge: 10
+  level: debug
+  reportCaller: true
+  outputToConsole: true
+redis:
+  addr: localhost:6379
+  password: 123456
+  db: 0
+  maxRetries: -1
+  # ms
+  dialTimeout: 1000
+  # ms
+  readTimeout: 1000
+  # ms
+  writeTimeout: 1000
+  poolSize: 10
+  minIdleConns: 1
+  # S
+  connMaxIdleTime: 180
+db:
+  dsn: root:12345678@tcp(127.0.0.1:3306)/user_db?charset=utf8mb4&parseTime=True&loc=Local&timeout=1s
+  maxOpenConns: 10
+  maxIdleConns: 1
+  # s
+  connMaxLifetime: 3600
+  # s
+  connMaxIdleTime: 600
+
+
+

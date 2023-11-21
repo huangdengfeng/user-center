@@ -8,6 +8,25 @@ data:
     listen.port=80
     deploy.idc=${IDC}
     user.server.app.address=user-server-app.user:80
+  application-rule.yaml: |-
+    router:
+      items:
+        - src-header: x-user-id
+          dst-header: x-user-set
+          segment-length: 2
+          rules:
+            - start: 00
+              end: 24
+              set: user-set00
+            - start: 25
+              end: 49
+              set: user-set01
+            - start: 50
+              end: 74
+              set: user-set10
+            - start: 75
+              end: 99
+              set: user-set11
 ---
 apiVersion: v1
 kind: Service
@@ -84,6 +103,9 @@ spec:
             - mountPath: /data/external-gateway/conf/application.properties
               name: external-gateway-config-volume
               subPath: application.properties
+            - mountPath: /data/external-gateway/conf/application-rule.yaml
+              name: external-gateway-config-volume
+              subPath: application-rule.yaml
       volumes:
         - name: external-gateway-config-volume
           configMap:
@@ -91,5 +113,7 @@ spec:
             items:
               - key: application.properties
                 path: application.properties
+              - key: application-rule.yaml
+                path: application-rule.yaml
 
 

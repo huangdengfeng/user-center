@@ -64,8 +64,8 @@ spec:
   replicas: 1
   template:
     metadata:
-      annotations:
-        sidecar.istio.io/inject: "false"
+      #      annotations:
+      #        sidecar.istio.io/inject: "false"
       labels:
         app: user-server-app
         version: v1

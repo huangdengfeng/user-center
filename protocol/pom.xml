@@ -19,6 +19,7 @@
     <modules>
         <module>user-server-domain-stub</module>
         <module>middleware-distributed-id-stub</module>
+        <module>user-session-server-stub</module>
     </modules>
 
     <dependencies>

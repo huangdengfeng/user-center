@@ -67,12 +67,12 @@ public class SessionGatewayFilterFactory extends AbstractGatewayFilterFactory<Se
                 ServerHttpRequest request = exchange.getRequest().mutate()
                         .headers(httpHeaders -> {
                             httpHeaders.remove(config.getUserHeader());
-                            httpHeaders.add(config.getUserHeader(), "1000000");
+                            httpHeaders.add(config.getUserHeader(), "1000000341");
                         }).build();
-                if (1 == 2) {// 未登录
-                    setResponseStatus(exchange, HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
-                }
+//                if (1 == 2) {// 未登录
+//                    setResponseStatus(exchange, HttpStatus.UNAUTHORIZED);
+//                    return exchange.getResponse().setComplete();
+//                }
                 return chain.filter(exchange.mutate().request(request).build());
             }
         };

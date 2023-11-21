@@ -1,0 +1,23 @@
+dubbo:
+  # https://cn.dubbo.apache.org/zh-cn/overview/mannual/golang-sdk/tutorial/governance/traffic/graceful_shutdown/
+  shutdown:
+    timeout: 30s
+    step-timeout: 3s
+    consumer-update-wait-time: 3s
+    internal-signal: true
+    offline-request-window-timeout: 3s
+  protocols:
+    triple:
+      name: tri
+      port: 21000
+  provider:
+    services:
+      UserSessionService:
+        interface: com.seezoon.user.session.server.stub.UserSessionService #仅仅java go 互通 must be compatible with grpc or dubbo-java
+  consumer:
+    request-timeout: 6s
+    protocol: tri
+    references:
+      UserSessionServiceClientImpl:
+        url: tri://127.0.0.1:21000
+        interface: com.seezoon.user.session.server.stub.UserSessionService # must be compatible with grpc or dubbo-java
